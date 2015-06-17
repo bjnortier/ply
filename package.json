@@ -1,6 +1,6 @@
 {
   "name": "ply",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "PLY file parsing",
   "main": "lib/index.js",
   "scripts": {

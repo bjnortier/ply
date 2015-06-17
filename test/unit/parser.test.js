@@ -44,9 +44,9 @@ describe('Parser', function() {
       '1 1 1\n', 
       '1 1 0\n', 
       '4 ', '0 1 2 3\n', 
-      '4 7 6 5 4\n', 
+      '4', ' 7 6 5 4\n', 
       '4 0 4 5 1\n', 
-      '4 1 5 6 2\n', 
+      '4 1 ', '5 6 2\n', 
       '4 2 6 7 3\n', 
     ];
     chunks.forEach(function(chunk) {
@@ -187,5 +187,6 @@ describe('Parser', function() {
     });
 
   });
+
 
 });
