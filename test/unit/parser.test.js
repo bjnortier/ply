@@ -148,4 +148,44 @@ describe('Parser', function() {
 
   });
 
+  it('can parse cube_binary_big_endian', function(done) {
+
+    var p = new Parser();
+    var elements = [];
+    p.on('element', function(element) {
+      elements.push(element);
+    });
+    
+    var s = fs.createReadStream(
+      path.join(__dirname, '..', 'resources', 'cube_binary_big_endian.ply'));
+    p.parse(s);
+
+    p.on('done', function() {
+      assert.deepEqual(elements, [
+        {name: 'vertex', x: 0, y: 0, z: 0 },
+        {name: 'vertex', x: 0, y: 1, z: 0 },
+        {name: 'vertex', x: 1, y: 0, z: 0 },
+        {name: 'vertex', x: 1, y: 1, z: 0 },
+        {name: 'vertex', x: 0, y: 0, z: 1 },
+        {name: 'vertex', x: 0, y: 1, z: 1 },
+        {name: 'vertex', x: 1, y: 0, z: 1 },
+        {name: 'vertex', x: 1, y: 1, z: 1 },
+        {name: 'face', vertex_indices: [ 0, 1, 3 ] },
+        {name: 'face', vertex_indices: [ 1, 3, 2 ] },
+        {name: 'face', vertex_indices: [ 0, 1, 5 ] },
+        {name: 'face', vertex_indices: [ 0, 5, 4 ] },
+        {name: 'face', vertex_indices: [ 4, 0, 2 ] },
+        {name: 'face', vertex_indices: [ 4, 2, 6 ] },
+        {name: 'face', vertex_indices: [ 2, 3, 7 ] },
+        {name: 'face', vertex_indices: [ 2, 7, 6 ] },
+        {name: 'face', vertex_indices: [ 4, 5, 7 ] },
+        {name: 'face', vertex_indices: [ 4, 7, 6 ] },
+        {name: 'face', vertex_indices: [ 1, 5, 7 ] },
+        {name: 'face', vertex_indices: [ 1, 7, 3 ] },
+      ]);
+      done();
+    });
+
+  });
+
 });
