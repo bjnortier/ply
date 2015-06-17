@@ -9,10 +9,6 @@ var Parser = require('../../lib/Parser');
 
 describe('Parser', function() {
 
-  it.skip('can determine the bytes per element', function() {
-
-  });
-
   it('can parse a stream', function(done) {
 
     // http://stackoverflow.com/questions/12755997/how-to-create-streams-from-string-in-node-js
@@ -68,11 +64,11 @@ describe('Parser', function() {
         { name: 'vertex', x: 1, y: 0, z: 1 },
         { name: 'vertex', x: 1, y: 1, z: 1 },
         { name: 'vertex', x: 1, y: 1, z: 0 },
-        { name: 'face', values: [ 0, 1, 2, 3 ] },
-        { name: 'face', values: [ 7, 6, 5, 4 ] },
-        { name: 'face', values: [ 0, 4, 5, 1 ] },
-        { name: 'face', values: [ 1, 5, 6, 2 ] },
-        { name: 'face', values: [ 2, 6, 7, 3 ] },
+        { name: 'face', vertex_index: [ 0, 1, 2, 3 ] },
+        { name: 'face', vertex_index: [ 7, 6, 5, 4 ] },
+        { name: 'face', vertex_index: [ 0, 4, 5, 1 ] },
+        { name: 'face', vertex_index: [ 1, 5, 6, 2 ] },
+        { name: 'face', vertex_index: [ 2, 6, 7, 3 ] },
       ]);
       done();
     });
@@ -101,18 +97,18 @@ describe('Parser', function() {
         { name: 'vertex', x: 1, y: 0, z: 1 },
         { name: 'vertex', x: 1, y: 1, z: 1 },
         { name: 'vertex', x: 1, y: 1, z: 0 },
-        { name: 'face', values: [ 0, 1, 2, 3 ] },
-        { name: 'face', values: [ 7, 6, 5, 4 ] },
-        { name: 'face', values: [ 0, 4, 5, 1 ] },
-        { name: 'face', values: [ 1, 5, 6, 2 ] },
-        { name: 'face', values: [ 2, 6, 7, 3 ] },
+        { name: 'face', vertex_index: [ 0, 1, 2, 3 ] },
+        { name: 'face', vertex_index: [ 7, 6, 5, 4 ] },
+        { name: 'face', vertex_index: [ 0, 4, 5, 1 ] },
+        { name: 'face', vertex_index: [ 1, 5, 6, 2 ] },
+        { name: 'face', vertex_index: [ 2, 6, 7, 3 ] },
       ]);
       done();
     });
 
   });
 
-  it.only('can parse cube_binary_little_endian', function(done) {
+  it('can parse cube_binary_little_endian', function(done) {
 
     var p = new Parser();
     var elements = [];
@@ -125,21 +121,28 @@ describe('Parser', function() {
     p.parse(s);
 
     p.on('done', function() {
-      // assert.deepEqual(elements, [
-      //   { name: 'vertex', x: 0, y: 0, z: 0 },
-      //   { name: 'vertex', x: 0, y: 0, z: 1 },
-      //   { name: 'vertex', x: 0, y: 1, z: 1 },
-      //   { name: 'vertex', x: 0, y: 1, z: 0 },
-      //   { name: 'vertex', x: 1, y: 0, z: 0 },
-      //   { name: 'vertex', x: 1, y: 0, z: 1 },
-      //   { name: 'vertex', x: 1, y: 1, z: 1 },
-      //   { name: 'vertex', x: 1, y: 1, z: 0 },
-      //   { name: 'face', values: [ 0, 1, 2, 3 ] },
-      //   { name: 'face', values: [ 7, 6, 5, 4 ] },
-      //   { name: 'face', values: [ 0, 4, 5, 1 ] },
-      //   { name: 'face', values: [ 1, 5, 6, 2 ] },
-      //   { name: 'face', values: [ 2, 6, 7, 3 ] },
-      // ]);
+      assert.deepEqual(elements, [
+        {name: 'vertex', x: 0, y: 0, z: 0 },
+        {name: 'vertex', x: 0, y: 1, z: 0 },
+        {name: 'vertex', x: 1, y: 0, z: 0 },
+        {name: 'vertex', x: 1, y: 1, z: 0 },
+        {name: 'vertex', x: 0, y: 0, z: 1 },
+        {name: 'vertex', x: 0, y: 1, z: 1 },
+        {name: 'vertex', x: 1, y: 0, z: 1 },
+        {name: 'vertex', x: 1, y: 1, z: 1 },
+        {name: 'face', vertex_indices: [ 0, 1, 3 ] },
+        {name: 'face', vertex_indices: [ 1, 3, 2 ] },
+        {name: 'face', vertex_indices: [ 0, 1, 5 ] },
+        {name: 'face', vertex_indices: [ 0, 5, 4 ] },
+        {name: 'face', vertex_indices: [ 4, 0, 2 ] },
+        {name: 'face', vertex_indices: [ 4, 2, 6 ] },
+        {name: 'face', vertex_indices: [ 2, 3, 7 ] },
+        {name: 'face', vertex_indices: [ 2, 7, 6 ] },
+        {name: 'face', vertex_indices: [ 4, 5, 7 ] },
+        {name: 'face', vertex_indices: [ 4, 7, 6 ] },
+        {name: 'face', vertex_indices: [ 1, 5, 7 ] },
+        {name: 'face', vertex_indices: [ 1, 7, 3 ] },
+      ]);
       done();
     });
 
