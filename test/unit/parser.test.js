@@ -1,5 +1,5 @@
-// var chai = require('chai');
-// var assert = chai.assert;
+var chai = require('chai');
+var assert = chai.assert;
 var stream = require('stream');
 var fs = require('fs');
 var path = require('path');
@@ -15,9 +15,14 @@ describe('Parser', function() {
     var s = new stream.Readable();
     s._read = function noop() {}; 
 
-    new Parser(s);
+    var p = new Parser(s);
+    var elements = [];
+    p.on('element', function(element) {
+      elements.push(element);
+    });
 
-
+    // Chop up chunks to simulate data not necessarily
+    // arriving in lines
     var chunks = [
       'pl', 'y\nformat ascii 1.0\n',
       'commen', 't made by anonymous\n', 
@@ -48,11 +53,37 @@ describe('Parser', function() {
     });
     s.push(null);
 
-
+    assert.deepEqual(elements, [
+      { name: 'vertex', x: 0, y: 0, z: 0 },
+      { name: 'vertex', x: 0, y: 0, z: 1 },
+      { name: 'vertex', x: 0, y: 1, z: 1 },
+      { name: 'vertex', x: 0, y: 1, z: 0 },
+      { name: 'vertex', x: 1, y: 0, z: 0 },
+      { name: 'vertex', x: 1, y: 0, z: 1 },
+      { name: 'vertex', x: 1, y: 1, z: 1 },
+      { name: 'vertex', x: 1, y: 1, z: 0 },
+      { name: 'face', values: [ 0, 1, 2, 3 ] },
+      { name: 'face', values: [ 7, 6, 5, 4 ] },
+      { name: 'face', values: [ 0, 4, 5, 1 ] },
+      { name: 'face', values: [ 1, 5, 6, 2 ] },
+      { name: 'face', values: [ 2, 6, 7, 3 ] },
+    ]);
+    
   });
 
   it('can parse cube_binary_little_endian', function() {
-    new Parser(fs.createReadStream(path.join(__dirname, '..', 'resources', 'cube_ascii.ply')));
+    var p = new Parser(fs.createReadStream(
+      path.join(__dirname, '..', 'resources', 'cube_ascii.ply')));
+    
+    var elements = [];
+    p.on('element', function(element) {
+      elements.push(element);
+    });
+
+    console.log('>>>');
+    assert.deepEqual(elements, [
+    ]);
+
   });
 
 });
